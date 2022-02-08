@@ -10,6 +10,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -23,10 +25,13 @@ class MainActivity : AppCompatActivity() {
     private lateinit var elementList:ArrayList<ElementClass>
     private lateinit var elementAdapter:ElementAdapter
 
+    private var db:FirebaseFirestore = FirebaseFirestore.getInstance()
+    val databaseRef = db.collection("Example").document("LTSJJrjjBHAKbl8mRNAC")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         elementList = ArrayList()
 
@@ -82,7 +87,10 @@ class MainActivity : AppCompatActivity() {
             val names = elementName.text.toString()
             elementList.add(ElementClass(names))
             elementAdapter.notifyDataSetChanged()
-//            Toast.makeText(this,"Продукт добавлен в список", Toast.LENGTH_SHORT).show()
+//            Toast.makeText(this,"Продукт добавлен в список", Toast.LENGTH_SHORT).show(
+
+            databaseRef.update("bazarList", FieldValue.arrayUnion(names))
+
             dialog.dismiss()
         }
         addDialog.setNegativeButton("Отменить"){

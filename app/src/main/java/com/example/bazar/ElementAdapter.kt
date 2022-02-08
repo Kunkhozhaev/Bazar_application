@@ -8,11 +8,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FieldValue
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ElementAdapter(val c: Context, val elementList:ArrayList<ElementClass>):RecyclerView.Adapter<ElementAdapter.elementViewHolder>() {
     inner class elementViewHolder(val v: View):RecyclerView.ViewHolder(v) {
         var name: TextView
         var deleteElement: ImageView
+
+        private var db: FirebaseFirestore = FirebaseFirestore.getInstance()
+        val databaseRef = db.collection("Example").document("LTSJJrjjBHAKbl8mRNAC")
 //        val check_box:CheckBox
 
         init {
@@ -22,22 +27,23 @@ class ElementAdapter(val c: Context, val elementList:ArrayList<ElementClass>):Re
             deleteElement.setOnClickListener{delete_item(it)}
         }
 
-//        private fun strike(v: View){
-//            val v = LayoutInflater.from(c).inflate(R.layout.list_element,null)
-//            val name = v.findViewById<EditText>(R.id.element_name)
-//
-//            val position = elementList[adapterPosition]
-//
-//            check_box.setOnCheckedChangeListener{buttonView, isChecked ->
-//                if (isChecked){
-//
-//                }else{
-//                    name.paintFlags = name.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG
-//                }
-//            }
-//        }
+        /*private fun strike(v: View){
+            val v = LayoutInflater.from(c).inflate(R.layout.list_element,null)
+            val name = v.findViewById<EditText>(R.id.element_name)
+
+            val position = elementList[adapterPosition]
+
+            check_box.setOnCheckedChangeListener{buttonView, isChecked ->
+                if (isChecked){
+
+                }else{
+                    name.paintFlags = name.paintFlags and Paint.STRIKE_THRU_TEXT_FLAG
+                }
+            }
+        }*/
 
         private fun delete_item(v: View){
+            
             val builder = AlertDialog.Builder(c)
             builder.setTitle("Удалить")
                 .setIcon(R.drawable.ic_warning)
@@ -49,6 +55,9 @@ class ElementAdapter(val c: Context, val elementList:ArrayList<ElementClass>):Re
                     elementList.removeAt(adapterPosition)
                     notifyDataSetChanged()
 //                    Toast.makeText(c, "Deleted this Information", Toast.LENGTH_SHORT).show()
+
+                    databaseRef.update("bazarList", FieldValue.arrayRemove(elementList[adapterPosition]))
+
                     dialog.dismiss()
                 }
                 .create()
