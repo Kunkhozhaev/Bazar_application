@@ -26,7 +26,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/elementName"
+            android:id="@+id/productName"
             android:hint="Продукт..."
             android:inputType="textPersonName"
             android:textColor="@color/purple_500"

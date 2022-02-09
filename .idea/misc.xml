@@ -3,6 +3,13 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/ANDROID DEVELOPMENT/PROJECTS/Bazar_application/app/src/main/res/layout/activity_main.xml" value="0.19444444444444445" />
+        <entry key="..\:/ANDROID DEVELOPMENT/PROJECTS/Bazar_application/app/src/main/res/layout/add_item.xml" value="0.20416666666666666" />
+        <entry key="..\:/ANDROID DEVELOPMENT/PROJECTS/Bazar_application/app/src/main/res/layout/dialog_progress.xml" value="0.19444444444444445" />
+        <entry key="..\:/ANDROID DEVELOPMENT/PROJECTS/Bazar_application/app/src/main/res/layout/fragment_main.xml" value="0.25" />
+        <entry key="..\:/ANDROID DEVELOPMENT/PROJECTS/Bazar_application/app/src/main/res/layout/item_add.xml" value="0.25" />
+        <entry key="..\:/ANDROID DEVELOPMENT/PROJECTS/Bazar_application/app/src/main/res/layout/item_product.xml" value="0.33" />
+        <entry key="..\:/ANDROID DEVELOPMENT/PROJECTS/Bazar_application/app/src/main/res/layout/list_element.xml" value="0.25" />
         <entry key="..\:/AndroidStudioProjects/Bazar/app/src/main/res/drawable/ic_add.xml" value="0.182" />
         <entry key="..\:/AndroidStudioProjects/Bazar/app/src/main/res/drawable/ic_delete.xml" value="0.2203125" />
         <entry key="..\:/AndroidStudioProjects/Bazar/app/src/main/res/drawable/ic_warning.xml" value="0.182" />
