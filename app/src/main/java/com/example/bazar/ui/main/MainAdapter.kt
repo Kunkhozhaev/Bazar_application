@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.bazar.core.onClick
 import com.example.bazar.data.model.Product
 import com.example.bazar.databinding.ItemProductBinding
 
@@ -13,7 +14,15 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
         RecyclerView.ViewHolder(binding.root) {
         fun populateModel(product: Product) {
             binding.elementName.text = product.productName
+            binding.deleteButton.onClick {
+                onItemClick.invoke(product)
+            }
         }
+    }
+
+    private var onItemClick: (product: Product) -> Unit = {}
+    fun setOnItemClickListener(onItemClick: (product: Product) -> Unit) {
+        this.onItemClick = onItemClick
     }
 
     var models: MutableList<Product> = mutableListOf()

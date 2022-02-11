@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.bazar.data.helper.ProductHelper
 import com.example.bazar.core.Resource
+import com.example.bazar.data.model.Product
 
 class MainViewModel(private val productHelper: ProductHelper) : ViewModel(){
 
@@ -24,14 +25,35 @@ class MainViewModel(private val productHelper: ProductHelper) : ViewModel(){
         )
     }
 
-    private var _productList: MutableLiveData<Resource<List<String>>> = MutableLiveData()
-    val productList: LiveData<Resource<List<String>>> get() = _productList
+    private var _productList: MutableLiveData<Resource<MutableList<Product>>> = MutableLiveData()
+    val productList: LiveData<Resource<MutableList<Product>>> get() = _productList
 
     fun allProducts() {
+        _productList.value = Resource.loading()
+        productHelper.allProducts(
+            {
+                _productList.value = Resource.success(it)
+            },
+            {
+                _productList.value = Resource.error(it)
+            }
+        )
 
     }
 
-    fun deleteProducts() {
+    private var _productDelete: MutableLiveData<Resource<String>> = MutableLiveData()
+    val productDelete: LiveData<Resource<String>> get() = _productDelete
 
+    fun deleteProduct(productName: String) {
+        _productDelete.value = Resource.loading()
+        productHelper.deleteProduct(
+            productName,
+            {
+                _productDelete.value = Resource.success(productName)
+            },
+            {
+                _productDelete.value = Resource.error(it)
+            }
+        )
     }
 }

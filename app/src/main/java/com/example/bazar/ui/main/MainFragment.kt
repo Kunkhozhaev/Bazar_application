@@ -27,8 +27,14 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         binding.addingBtn.onClick {
             findNavController().navigate(R.id.action_mainFragment_to_dialog)
         }
-        setUpObserver()
+
+        adapter.setOnItemClickListener {
+            viewModel.deleteProduct(it.productName)
+        }
+
         viewModel.allProducts()
+
+        setUpObserver()
     }
 
     private fun setUpObserver() {
@@ -39,7 +45,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
                 ResourceState.SUCCESS -> {
                     hideProgress()
-                    toast("Product added to Firestore")
+                    toast("Product is added to Firestore")
+                    viewModel.allProducts()
                 }
                 ResourceState.ERROR -> {
                     toast(it.message!!)
@@ -51,9 +58,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
-    }
 
-    private fun setUpObserverForAllData() {
         viewModel.productList.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
@@ -61,6 +66,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
                 ResourceState.SUCCESS -> {
                     hideProgress()
+                    adapter.models = it.data!!
 
                 }
                 ResourceState.ERROR -> {
@@ -73,29 +79,26 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
-    }
 
-    // todo usi jerge setUpObservers() degen funkciya jaziw kerek
-
-    private fun addInfo() {
-//        val addDialog = AlertDialog.Builder(requireContext())
-//        addDialog.setView(v)
-//        addDialog.setPositiveButton("Ок") { dialog, _ ->
-//            val names = elementName.text.toString()
-//            elementList.add(ElementClass(names))
-//            mainAdapter.notifyDataSetChanged()
-////            Toast.makeText(this,"Продукт добавлен в список", Toast.LENGTH_SHORT).show(
-//
-//            databaseRef.update("bazarList", FieldValue.arrayUnion(names))
-//
-//            dialog.dismiss()
-//        }
-//        addDialog.setNegativeButton("Отменить") { dialog, _ ->
-//            dialog.dismiss()
-////            Toast.makeText(this,"Отмена", Toast.LENGTH_SHORT).show()
-//
-//        }
-//        addDialog.create()
-//        addDialog.show()
+        viewModel.productDelete.observe(requireActivity()){
+            when (it.status) {
+                ResourceState.LOADING -> {
+                    showProgress()
+                }
+                ResourceState.SUCCESS -> {
+                    hideProgress()
+                    toast("Product is deleted from Firestore")
+                    viewModel.allProducts()
+                }
+                ResourceState.ERROR -> {
+                    toast(it.message!!)
+                    hideProgress()
+                }
+                ResourceState.NETWORK_ERROR -> {
+                    hideProgress()
+                    toast(NO_INTERNET)
+                }
+            }
+        }
     }
 }

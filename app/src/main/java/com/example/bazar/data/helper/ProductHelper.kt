@@ -25,13 +25,37 @@ class ProductHelper(
     }
 
     fun allProducts(
-        onSuccess: (products: List<String>) -> Unit,
+        onSuccess: (products: MutableList<Product>) -> Unit,
         onFailure: (msg: String?) -> Unit
     ){
         db.collection(Constants.PRODUCTS).document("productList").get()
+            .addOnSuccessListener {
+                val resource = it.data
+                val itemList = mutableListOf<Product>()
+                resource!!.forEach {
+                    itemList.add(Product(it.key))
+                }
 
+                onSuccess.invoke(itemList)
+            }
+            .addOnFailureListener{
+                onFailure.invoke(it.localizedMessage)
+            }
     }
 
     // todo usi jerge productti oshiretin funkciya jaziw kerek
-    fun deleteProduct(){}
+    fun deleteProduct(
+        productName: String,
+        onSuccess: () -> Unit,
+        onFailure: (msg: String?) -> Unit
+    ){
+        db.collection(Constants.PRODUCTS).document("productList")
+            .update("products", FieldValue.arrayRemove(productName))
+            .addOnSuccessListener {
+                onSuccess.invoke()
+            }
+            .addOnFailureListener {
+                onFailure.invoke(it.localizedMessage)
+            }
+    }
 }
