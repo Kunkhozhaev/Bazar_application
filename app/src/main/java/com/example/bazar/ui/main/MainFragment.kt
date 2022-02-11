@@ -28,8 +28,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             findNavController().navigate(R.id.action_mainFragment_to_dialog)
         }
 
-        adapter.setOnItemClickListener {
-            viewModel.deleteProduct(it.productName)
+        binding.rvProducts.adapter = adapter
+
+        adapter.setOnItemClickListener {it, position ->
+            viewModel.deleteProduct(adapter.models, position)
         }
 
         viewModel.allProducts()

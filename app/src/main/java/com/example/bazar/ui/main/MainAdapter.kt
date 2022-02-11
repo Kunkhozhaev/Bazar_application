@@ -12,16 +12,16 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
-        fun populateModel(product: Product) {
+        fun populateModel(product: Product, position: Int) {
             binding.elementName.text = product.productName
             binding.deleteButton.onClick {
-                onItemClick.invoke(product)
+                onItemClick.invoke(product, position)
             }
         }
     }
 
-    private var onItemClick: (product: Product) -> Unit = {}
-    fun setOnItemClickListener(onItemClick: (product: Product) -> Unit) {
+    private var onItemClick: (product: Product, position: Int) -> Unit = {_, _ ->}
+    fun setOnItemClickListener(onItemClick: (product: Product, position: Int) -> Unit) {
         this.onItemClick = onItemClick
     }
 
@@ -39,7 +39,7 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.populateModel(models[position])
+        holder.populateModel(models[position], position)
     }
 
     override fun getItemCount() = models.size
