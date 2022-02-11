@@ -2,39 +2,77 @@ package com.example.bazar.ui.main
 
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.navigation.findNavController
 import com.example.bazar.R
+import com.example.bazar.core.Constants.NO_INTERNET
+import com.example.bazar.core.hideProgress
+import com.example.bazar.core.onClick
+import com.example.bazar.core.showProgress
+import com.example.bazar.core.toast
 import com.example.bazar.databinding.FragmentMainBinding
 import org.koin.android.viewmodel.ext.android.viewModel
+import com.example.bazar.core.ResourceState
+import com.example.bazar.databinding.ItemAddBinding
 
 class MainFragment : Fragment(R.layout.fragment_main) {
 
-    private lateinit var mainAdapter: MainAdapter
     private lateinit var binding: FragmentMainBinding
     private val viewModel: MainViewModel by viewModel()
+    private val adapter = MainAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMainBinding.bind(view)
-
+        binding.addingBtn.onClick {
+            findNavController().navigate(R.id.action_mainFragment_to_dialog)
+        }
+        setUpObserver()
+        viewModel.allProducts()
     }
 
-    private fun addProductDialog() {
-        AlertDialog.Builder(requireContext())
-            .apply {
-                setCancelable(true)
-                setView(R.layout.item_add)
-                setTitle(getString(R.string.add_product))
-                setPositiveButton("ADD") { _, _ ->
-                    mainAdapter.addData()
+    private fun setUpObserver() {
+        viewModel.product.observe(requireActivity()) {
+            when (it.status) {
+                ResourceState.LOADING -> {
+                    showProgress()
                 }
-                setNeutralButton("CANCEL") { dialog, _ ->
-                    dialog.dismiss()
+                ResourceState.SUCCESS -> {
+                    hideProgress()
+                    toast("Product added to Firestore")
                 }
-                create()
-                show()
+                ResourceState.ERROR -> {
+                    toast(it.message!!)
+                    hideProgress()
+                }
+                ResourceState.NETWORK_ERROR -> {
+                    hideProgress()
+                    toast(NO_INTERNET)
+                }
             }
+        }
+    }
+
+    private fun setUpObserverForAllData() {
+        viewModel.productList.observe(requireActivity()) {
+            when (it.status) {
+                ResourceState.LOADING -> {
+                    showProgress()
+                }
+                ResourceState.SUCCESS -> {
+                    hideProgress()
+
+                }
+                ResourceState.ERROR -> {
+                    toast(it.message!!)
+                    hideProgress()
+                }
+                ResourceState.NETWORK_ERROR -> {
+                    hideProgress()
+                    toast(NO_INTERNET)
+                }
+            }
+        }
     }
 
     // todo usi jerge setUpObservers() degen funkciya jaziw kerek

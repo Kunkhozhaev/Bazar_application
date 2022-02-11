@@ -1,7 +1,7 @@
 package com.example.bazar.ui.main
 
 import android.annotation.SuppressLint
-import android.view.View
+import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.bazar.data.model.Product
@@ -25,7 +25,8 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
         }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        TODO("Not yet implemented")
+        val binding = ItemProductBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return ViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
@@ -33,33 +34,4 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
     }
 
     override fun getItemCount() = models.size
-
-    private fun delete_item(v: View){
-//
-//            val builder = AlertDialog.Builder(c)
-//            builder.setTitle("Удалить")
-//                .setIcon(R.drawable.ic_warning)
-//                .setMessage("Вы уверены что хотите оширгенский?")
-//                .setPositiveButton("Як") { dialog, _ ->
-//                    dialog.dismiss()
-//                }
-//                .setNegativeButton("Ауа") { dialog, _ ->
-//                    elementList.removeAt(adapterPosition)
-//                    notifyDataSetChanged()
-////                    Toast.makeText(c, "Deleted this Information", Toast.LENGTH_SHORT).show()
-//
-//                    databaseRef.update("bazarList", FieldValue.arrayRemove(elementList[adapterPosition]))
-//
-//                    dialog.dismiss()
-//                }
-//                .create()
-//                .show()
-//
-//        }
-    }
-
-    fun addData() {
-        //
-        notifyDataSetChanged()
-    }
 }

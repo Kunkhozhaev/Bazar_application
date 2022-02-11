@@ -1,4 +1,4 @@
-package uz.texnopos.installment.core
+package com.example.bazar.core
 
 
 open class Resource<out T>(val status: ResourceState, val data: T?, val message: String?) {

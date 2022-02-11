@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.bazar.data.helper.ProductHelper
-import uz.texnopos.installment.core.Resource
+import com.example.bazar.core.Resource
 
 class MainViewModel(private val productHelper: ProductHelper) : ViewModel(){
 
@@ -23,6 +23,9 @@ class MainViewModel(private val productHelper: ProductHelper) : ViewModel(){
             }
         )
     }
+
+    private var _productList: MutableLiveData<Resource<List<String>>> = MutableLiveData()
+    val productList: LiveData<Resource<List<String>>> get() = _productList
 
     fun allProducts() {
 
