@@ -33,7 +33,8 @@ class ProductHelper(
                 val resource = it.data!!.values
                 val itemList = mutableListOf<Product>()
                 resource.forEach {
-                    it.toString().split(",").forEach{
+                    val temp = it.toString().substring(1, it.toString().length - 1)
+                    temp.split(",").forEach{
                         itemList.add(Product(it))
                     }
                 }
