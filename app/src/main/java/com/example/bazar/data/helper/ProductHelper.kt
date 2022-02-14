@@ -11,13 +11,13 @@ class ProductHelper(
 
     fun addNewProduct(
         productName: String,
-        onSuccess: () -> Unit,
+        onSuccess: (msg: String?) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
         db.collection(Constants.PRODUCTS).document("productList")
             .update("products", FieldValue.arrayUnion(productName))
             .addOnSuccessListener {
-                onSuccess.invoke()
+                onSuccess.invoke("")
             }
             .addOnFailureListener {
                 onFailure.invoke(it.localizedMessage)
@@ -33,7 +33,8 @@ class ProductHelper(
                 val resource = it.data!!.values
                 val itemList = mutableListOf<Product>()
                 resource.forEach {
-                    val temp = it.toString().substring(1, it.toString().length - 1)
+                    var temp = it.toString().substring(1, it.toString().length - 1)
+                    temp = temp.replace("\\s".toRegex(), "")
                     temp.split(",").forEach{
                         itemList.add(Product(it))
                     }
@@ -47,13 +48,12 @@ class ProductHelper(
     }
 
     fun deleteProduct(
-        productList: MutableList<Product>,
-        position: Int,
+        productName: String,
         onSuccess: (msg: String?) -> Unit,
         onFailure: (msg: String?) -> Unit
     ){
         db.collection(Constants.PRODUCTS).document("productList")
-            .update("products", FieldValue.arrayRemove(productList[position]))
+            .update("products", FieldValue.arrayRemove(productName))
             .addOnSuccessListener {
                 onSuccess.invoke("")
             }

@@ -30,8 +30,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         binding.rvProducts.adapter = adapter
 
-        adapter.setOnItemClickListener {it, position ->
-            viewModel.deleteProduct(adapter.models, position)
+        adapter.setOnItemClickListener {it ->
+            viewModel.deleteProduct(it.productName)
         }
 
         viewModel.allProducts()
@@ -39,28 +39,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         setUpObserver()
     }
 
-    private fun setUpObserver() {
-        viewModel.product.observe(requireActivity()) {
-            when (it.status) {
-                ResourceState.LOADING -> {
-                    showProgress()
-                }
-                ResourceState.SUCCESS -> {
-                    hideProgress()
-                    toast("Product is added to Firestore")
-                    viewModel.allProducts()
-                }
-                ResourceState.ERROR -> {
-                    toast(it.message!!)
-                    hideProgress()
-                }
-                ResourceState.NETWORK_ERROR -> {
-                    hideProgress()
-                    toast(NO_INTERNET)
-                }
-            }
-        }
 
+    private fun setUpObserver() {
+        //Observer of Adding function
+
+        //Observer of Getting function
         viewModel.productList.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
@@ -69,7 +52,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 ResourceState.SUCCESS -> {
                     hideProgress()
                     adapter.models = it.data!!
-
                 }
                 ResourceState.ERROR -> {
                     toast(it.message!!)
@@ -82,6 +64,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
         }
 
+        // Observer of Deleting function
         viewModel.productDelete.observe(requireActivity()){
             when (it.status) {
                 ResourceState.LOADING -> {
