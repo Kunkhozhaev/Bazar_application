@@ -23,24 +23,23 @@ class ProductHelper(
                 onFailure.invoke(it.localizedMessage)
             }
     }
-
+    
     fun allProducts(
         onSuccess: (products: MutableList<Product>) -> Unit,
         onFailure: (msg: String?) -> Unit
-    ){
+    ) {
         db.collection(Constants.PRODUCTS).document("productList").get()
             .addOnSuccessListener {
                 val resource = it.data!!.values
                 val itemList = mutableListOf<Product>()
                 resource.forEach {
-                    it.toString().split(",").forEach{
+                    it.toString().split(",").forEach {
                         itemList.add(Product(it))
                     }
                 }
-
                 onSuccess.invoke(itemList)
             }
-            .addOnFailureListener{
+            .addOnFailureListener {
                 onFailure.invoke(it.localizedMessage)
             }
     }
@@ -50,7 +49,7 @@ class ProductHelper(
         position: Int,
         onSuccess: (msg: String?) -> Unit,
         onFailure: (msg: String?) -> Unit
-    ){
+    ) {
         db.collection(Constants.PRODUCTS).document("productList")
             .update("products", FieldValue.arrayRemove(productList[position]))
             .addOnSuccessListener {
@@ -60,5 +59,33 @@ class ProductHelper(
                 onFailure.invoke(it.localizedMessage)
             }
     }
+
+    fun deleteProductNameFromFirestoreArray(
+        productName: String,
+        onSuccess: () -> Unit,
+        onFailure: (msg: String?) -> Unit
+    ) {
+        db.collection(Constants.PRODUCTS).document("productList").get()
+            .addOnSuccessListener { doc ->
+                val resource = doc.data!!.values
+                resource.forEach { arr ->
+                    arr.toString().split(",").forEach { element ->
+                        if (element.contains(productName, ignoreCase = true)) {
+                            db.collection(Constants.PRODUCTS).document("productList")
+                                .update("products", FieldValue.arrayRemove(productName))
+                                .addOnSuccessListener {
+                                    onSuccess.invoke()
+                                }
+                                .addOnFailureListener {
+                                    onFailure.invoke(it.localizedMessage)
+                                }
+                        }
+                    }
+                }
+                onSuccess.invoke()
+            }
+            .addOnFailureListener {
+                onFailure.invoke(it.localizedMessage)
+            }
+    }
 }
-//
