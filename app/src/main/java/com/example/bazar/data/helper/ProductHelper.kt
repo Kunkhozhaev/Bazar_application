@@ -4,6 +4,8 @@ import com.example.bazar.core.Constants
 import com.example.bazar.data.model.Product
 import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
+import java.security.ProtectionDomain
+import java.util.*
 
 class ProductHelper(
     private val db: FirebaseFirestore
@@ -14,8 +16,9 @@ class ProductHelper(
         onSuccess: (msg: String?) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
-        db.collection(Constants.PRODUCTS).document("productList")
-            .update("products", FieldValue.arrayUnion(productName))
+        val id = UUID.randomUUID().toString()
+
+        db.collection(Constants.PRODUCTS).document(id).set(Product(id, productName))
             .addOnSuccessListener {
                 onSuccess.invoke("")
             }
@@ -28,19 +31,13 @@ class ProductHelper(
         onSuccess: (products: MutableList<Product>) -> Unit,
         onFailure: (msg: String?) -> Unit
     ){
-        db.collection(Constants.PRODUCTS).document("productList").get()
+        db.collection(Constants.PRODUCTS).get()
             .addOnSuccessListener {
-                val resource = it.data!!.values
-                val itemList = mutableListOf<Product>()
-                resource.forEach {
-                    var temp = it.toString().substring(1, it.toString().length - 1)
-                    temp = temp.replace("\\s".toRegex(), "")
-                    temp.split(",").forEach{
-                        itemList.add(Product(it))
-                    }
+                val documentsList = it.documents.map {
+                    it.toObject(Product::class.java)
                 }
+                onSuccess.invoke(documentsList as MutableList<Product>)
 
-                onSuccess.invoke(itemList)
             }
             .addOnFailureListener{
                 onFailure.invoke(it.localizedMessage)
@@ -48,12 +45,11 @@ class ProductHelper(
     }
 
     fun deleteProduct(
-        productName: String,
+        id: String,
         onSuccess: (msg: String?) -> Unit,
         onFailure: (msg: String?) -> Unit
     ){
-        db.collection(Constants.PRODUCTS).document("productList")
-            .update("products", FieldValue.arrayRemove(productName))
+        db.collection(Constants.PRODUCTS).document(id).delete()
             .addOnSuccessListener {
                 onSuccess.invoke("")
             }

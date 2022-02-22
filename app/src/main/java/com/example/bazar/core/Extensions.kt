@@ -14,6 +14,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.RecyclerView
@@ -98,6 +99,14 @@ fun Fragment.showProgress() {
 
 fun Fragment.hideProgress() {
     (requireActivity() as AppBaseActivity).showProgress(false)
+}
+
+fun DialogFragment.showProgress() {
+    (requireContext() as AppBaseActivity).showProgress(true)
+}
+
+fun DialogFragment.hideProgress() {
+    (requireContext() as AppBaseActivity).showProgress(false)
 }
 
 fun Fragment.launchBrowser(link: String) {
