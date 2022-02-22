@@ -10,11 +10,7 @@
         android:name="com.example.bazar.ui.main.MainFragment"
         android:label="MainFragment"
         tools:layout="@layout/fragment_main"
-        >
-        <action
-            android:id="@+id/action_mainFragment_to_dialog"
-            app:destination="@id/dialog" />
-    </fragment>
+        />
     <dialog
         android:id="@+id/dialog"
         android:name="com.example.bazar.ui.main.Dialog"

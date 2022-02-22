@@ -44,10 +44,10 @@ class MainViewModel(private val productHelper: ProductHelper) : ViewModel(){
     private var _productDelete: MutableLiveData<Resource<String>> = MutableLiveData()
     val productDelete: LiveData<Resource<String>> get() = _productDelete
 
-    fun deleteProduct(productName: String) {
+    fun deleteProduct(id: String) {
         _productDelete.value = Resource.loading()
         productHelper.deleteProduct(
-            productName,
+            id,
             {
                 _productDelete.value = Resource.success("")
             },

@@ -1,5 +1,7 @@
 package com.example.bazar.data.model
 
 data class Product(
-    var productName: String
+    val id: String = "",
+    var productName: String = "",
+    var checked: Boolean = false
     )
