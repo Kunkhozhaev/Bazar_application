@@ -20,7 +20,7 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
         }
     }
 
-    private var onItemClick: (product: Product) -> Unit = {_ ->}
+    private var onItemClick: (product: Product) -> Unit = {}
     fun setOnItemClickListener(onItemClick: (product: Product) -> Unit) {
         this.onItemClick = onItemClick
     }

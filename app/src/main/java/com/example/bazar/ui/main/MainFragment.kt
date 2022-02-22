@@ -30,7 +30,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         binding.rvProducts.adapter = adapter
 
-        adapter.setOnItemClickListener {it ->
+        adapter.setOnItemClickListener { it ->
             viewModel.deleteProduct(it.productName)
         }
 

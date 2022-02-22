@@ -33,9 +33,8 @@ class Dialog : DialogFragment() {
             btnAdd.onClick {
                 val productName = productName.text.toString()
                 viewModel.addNewProduct(productName)
-                dialog!!.dismiss()
-                setUpAddObserver()
                 viewModel.allProducts()
+                dialog!!.dismiss()
             }
             cancel.onClick {
                 dialog!!.dismiss()
