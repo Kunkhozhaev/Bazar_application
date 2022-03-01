@@ -11,7 +11,7 @@ import com.example.bazar.core.*
 import com.example.bazar.databinding.ItemAddBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
-class Dialog : DialogFragment() {
+class Dialog() : DialogFragment() {
 
     private lateinit var binding: ItemAddBinding
     private val viewModel: MainViewModel by viewModel()
@@ -33,6 +33,11 @@ class Dialog : DialogFragment() {
             btnAdd.onClick {
                 val productName = productName.text.toString()
                 viewModel.addNewProduct(productName)
+<<<<<<< HEAD
+=======
+
+                dialog!!.dismiss()
+>>>>>>> 479829e89ba6e10de6623ef308eab72f877b75c9
                 viewModel.allProducts()
                 dialog!!.dismiss()
             }
@@ -46,11 +51,11 @@ class Dialog : DialogFragment() {
         viewModel.product.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
-                    //showProgress()
+                    showProgress()
                     toast("Loading bar")
                 }
                 ResourceState.SUCCESS -> {
-                    //hideProgress()
+                    hideProgress()
                     toast("Product is added to Firestore")
                     viewModel.allProducts()
                 }

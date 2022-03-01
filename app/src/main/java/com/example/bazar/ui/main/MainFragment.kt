@@ -25,13 +25,18 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMainBinding.bind(view)
         binding.addingBtn.onClick {
-            findNavController().navigate(R.id.action_mainFragment_to_dialog)
+            Dialog()
         }
 
         binding.rvProducts.adapter = adapter
 
+<<<<<<< HEAD
         adapter.setOnItemClickListener { it ->
             viewModel.deleteProduct(it.productName)
+=======
+        adapter.setOnItemClickListener {it ->
+            viewModel.deleteProduct(it.id)
+>>>>>>> 479829e89ba6e10de6623ef308eab72f877b75c9
         }
 
         viewModel.allProducts()
