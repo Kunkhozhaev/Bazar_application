@@ -101,14 +101,6 @@ fun Fragment.hideProgress() {
     (requireActivity() as AppBaseActivity).showProgress(false)
 }
 
-fun DialogFragment.showProgress() {
-    (requireContext() as AppBaseActivity).showProgress(true)
-}
-
-fun DialogFragment.hideProgress() {
-    (requireContext() as AppBaseActivity).showProgress(false)
-}
-
 fun Fragment.launchBrowser(link: String) {
     try {
         val myIntent = Intent(Intent.ACTION_VIEW, Uri.parse(link))

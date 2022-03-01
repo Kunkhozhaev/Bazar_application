@@ -2,9 +2,7 @@ package com.example.bazar.data.helper
 
 import com.example.bazar.core.Constants
 import com.example.bazar.data.model.Product
-import com.google.firebase.firestore.FieldValue
 import com.google.firebase.firestore.FirebaseFirestore
-import java.security.ProtectionDomain
 import java.util.*
 
 class ProductHelper(

@@ -3,17 +3,11 @@ package com.example.bazar.ui.main
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
 import com.example.bazar.R
+import com.example.bazar.core.*
 import com.example.bazar.core.Constants.NO_INTERNET
-import com.example.bazar.core.hideProgress
-import com.example.bazar.core.onClick
-import com.example.bazar.core.showProgress
-import com.example.bazar.core.toast
 import com.example.bazar.databinding.FragmentMainBinding
 import org.koin.android.viewmodel.ext.android.viewModel
-import com.example.bazar.core.ResourceState
-import com.example.bazar.databinding.ItemAddBinding
 
 class MainFragment : Fragment(R.layout.fragment_main) {
 
@@ -25,25 +19,16 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMainBinding.bind(view)
         binding.addingBtn.onClick {
-            Dialog()
+            showDialog()
         }
-
         binding.rvProducts.adapter = adapter
 
-<<<<<<< HEAD
         adapter.setOnItemClickListener { it ->
-            viewModel.deleteProduct(it.productName)
-=======
-        adapter.setOnItemClickListener {it ->
             viewModel.deleteProduct(it.id)
->>>>>>> 479829e89ba6e10de6623ef308eab72f877b75c9
         }
-
         viewModel.allProducts()
-
         setUpObserver()
     }
-
 
     private fun setUpObserver() {
         //Observer of Adding function
@@ -70,7 +55,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
 
         // Observer of Deleting function
-        viewModel.productDelete.observe(requireActivity()){
+        viewModel.productDelete.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
                     showProgress()
@@ -90,5 +75,13 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
+    }
+
+    fun refresh() {
+        viewModel.allProducts()
+    }
+
+    private fun showDialog() {
+        AddDialogFragment(this)
     }
 }

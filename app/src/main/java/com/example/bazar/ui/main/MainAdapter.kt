@@ -12,17 +12,10 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
 
     inner class ViewHolder(private val binding: ItemProductBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         fun populateModel(product: Product) {
-
             binding.apply {
                 elementName.text = product.productName
                 checkbox.isChecked = product.checked
-
-                cardView.onClick {
-                    onItemClick.invoke(product)
-                }
-
                 deleteButton.onClick {
                     onItemClick.invoke(product)
                 }
