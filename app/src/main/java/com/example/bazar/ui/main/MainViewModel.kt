@@ -56,4 +56,21 @@ class MainViewModel(private val productHelper: ProductHelper) : ViewModel(){
             }
         )
     }
+
+    private var _checkboxState: MutableLiveData<Resource<Boolean>> = MutableLiveData()
+    val checkboxState: LiveData<Resource<Boolean>> get() = _checkboxState
+
+    fun setCheckboxState(id : String, checked : Boolean){
+        _checkboxState.value = Resource.loading()
+        productHelper.setCheckboxState(
+            id,
+            checked,
+            {
+                _checkboxState.value = Resource.success(it)
+            },
+            {
+                _checkboxState.value = Resource.error(it)
+            }
+        )
+    }
 }

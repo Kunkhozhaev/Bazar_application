@@ -55,4 +55,20 @@ class ProductHelper(
                 onFailure.invoke(it.localizedMessage)
             }
     }
+    //TODO("And also here")
+    fun setCheckboxState(
+        id: String,
+        checked : Boolean,
+        onSuccess: (bool: Boolean) -> Unit,
+        onFailure: (msg: String?) -> Unit
+    ){
+        db.collection(Constants.PRODUCTS).document(id).update(id, checked)
+            .addOnSuccessListener {
+                onSuccess.invoke()
+            }
+            .addOnFailureListener {
+                onFailure.invoke(it.localizedMessage)
+            }
+
+    }
 }

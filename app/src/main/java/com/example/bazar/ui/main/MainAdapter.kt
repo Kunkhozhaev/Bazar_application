@@ -15,7 +15,8 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
         fun populateModel(product: Product) {
             binding.apply {
                 elementName.text = product.productName
-                checkbox.isChecked = product.checked
+                chbox.isChecked = product.checked
+
                 deleteButton.onClick {
                     onItemClick.invoke(product)
                 }

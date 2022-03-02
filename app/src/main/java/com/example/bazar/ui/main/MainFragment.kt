@@ -25,14 +25,14 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         adapter.setOnItemClickListener { it ->
             viewModel.deleteProduct(it.id)
+            viewModel.setCheckboxState(it.id, it.checked)
         }
         viewModel.allProducts()
         setUpObserver()
+        setCheckboxObserver()
     }
 
     private fun setUpObserver() {
-        //Observer of Adding function
-
         //Observer of Getting function
         viewModel.productList.observe(requireActivity()) {
             when (it.status) {
@@ -77,6 +77,27 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
     }
 
+    private fun setCheckboxObserver(){
+        viewModel.checkboxState.observe(requireActivity()) {
+            when (it.status) {
+                ResourceState.LOADING -> {
+                    showProgress()
+                }
+                ResourceState.SUCCESS -> {
+                    hideProgress()
+                    //TODO("Smthng here")
+                }
+                ResourceState.ERROR -> {
+                    toast(it.message!!)
+                    hideProgress()
+                }
+                ResourceState.NETWORK_ERROR -> {
+                    hideProgress()
+                    toast(NO_INTERNET)
+                }
+            }
+        }
+    }
     fun refresh() {
         viewModel.allProducts()
     }
