@@ -28,7 +28,7 @@ class ProductHelper(
     fun allProducts(
         onSuccess: (products: MutableList<Product>) -> Unit,
         onFailure: (msg: String?) -> Unit
-    ){
+    ) {
         db.collection(Constants.PRODUCTS).get()
             .addOnSuccessListener {
                 val documentsList = it.documents.map {
@@ -37,7 +37,7 @@ class ProductHelper(
                 onSuccess.invoke(documentsList as MutableList<Product>)
 
             }
-            .addOnFailureListener{
+            .addOnFailureListener {
                 onFailure.invoke(it.localizedMessage)
             }
     }
@@ -46,7 +46,7 @@ class ProductHelper(
         id: String,
         onSuccess: (msg: String?) -> Unit,
         onFailure: (msg: String?) -> Unit
-    ){
+    ) {
         db.collection(Constants.PRODUCTS).document(id).delete()
             .addOnSuccessListener {
                 onSuccess.invoke("")
@@ -55,20 +55,19 @@ class ProductHelper(
                 onFailure.invoke(it.localizedMessage)
             }
     }
-    //TODO("And also here")
+
     fun setCheckboxState(
         id: String,
-        checked : Boolean,
+        checked: Boolean,
         onSuccess: (bool: Boolean) -> Unit,
         onFailure: (msg: String?) -> Unit
-    ){
-        db.collection(Constants.PRODUCTS).document(id).update(id, checked)
+    ) {
+        db.collection(Constants.PRODUCTS).document(id).update("checked", checked)
             .addOnSuccessListener {
-                onSuccess.invoke()
+                onSuccess.invoke(checked)
             }
             .addOnFailureListener {
                 onFailure.invoke(it.localizedMessage)
             }
-
     }
 }

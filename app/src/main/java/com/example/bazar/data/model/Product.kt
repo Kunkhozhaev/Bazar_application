@@ -4,4 +4,4 @@ data class Product(
     val id: String = "",
     var productName: String = "",
     var checked: Boolean = false
-    )
+)

@@ -25,8 +25,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         adapter.setOnItemClickListener { it ->
             viewModel.deleteProduct(it.id)
-            viewModel.setCheckboxState(it.id, it.checked)
         }
+
+        adapter.setOnCheckBoxClickListener { product, state ->
+            viewModel.setCheckboxState(product.id, state)
+        }
+
         viewModel.allProducts()
         setUpObserver()
         setCheckboxObserver()
@@ -85,7 +89,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
                 ResourceState.SUCCESS -> {
                     hideProgress()
-                    //TODO("Smthng here")
                 }
                 ResourceState.ERROR -> {
                     toast(it.message!!)
@@ -98,6 +101,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             }
         }
     }
+
     fun refresh() {
         viewModel.allProducts()
     }

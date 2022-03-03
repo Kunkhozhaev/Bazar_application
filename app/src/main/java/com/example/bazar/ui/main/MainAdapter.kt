@@ -15,10 +15,12 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
         fun populateModel(product: Product) {
             binding.apply {
                 elementName.text = product.productName
-                chbox.isChecked = product.checked
-
+                checkBox.isChecked = product.checked
                 deleteButton.onClick {
                     onItemClick.invoke(product)
+                }
+                checkBox.onClick {
+                    onCheckBoxClick.invoke(product, checkBox.isChecked)
                 }
             }
         }
@@ -27,6 +29,11 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
     private var onItemClick: (product: Product) -> Unit = {}
     fun setOnItemClickListener(onItemClick: (product: Product) -> Unit) {
         this.onItemClick = onItemClick
+    }
+
+    private var onCheckBoxClick: (product: Product, state: Boolean) -> Unit = {_, _->}
+    fun setOnCheckBoxClickListener(onCheckBoxClick: (product: Product, state: Boolean) -> Unit) {
+        this.onCheckBoxClick = onCheckBoxClick
     }
 
     var models: MutableList<Product> = mutableListOf()
