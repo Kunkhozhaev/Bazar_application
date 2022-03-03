@@ -31,7 +31,15 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             viewModel.setCheckboxState(product.id, state)
         }
 
+        binding.apply{
+            swipeToRefresh.setOnRefreshListener {
+                refresh()
+                swipeToRefresh.isRefreshing = false
+            }
+        }
+
         viewModel.allProducts()
+
         setUpObserver()
         setCheckboxObserver()
     }
@@ -66,7 +74,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
                 ResourceState.SUCCESS -> {
                     hideProgress()
-                    toast("Product is deleted from Firestore")
+                    toast("Продукт удален")
                     viewModel.allProducts()
                 }
                 ResourceState.ERROR -> {
@@ -109,4 +117,5 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private fun showDialog() {
         AddDialogFragment(this)
     }
+
 }

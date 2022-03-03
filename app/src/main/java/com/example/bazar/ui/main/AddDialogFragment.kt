@@ -54,10 +54,10 @@ class AddDialogFragment(private val fragment: MainFragment) : BottomSheetDialogF
             when (it.status) {
                 ResourceState.LOADING -> {
                     showProgress()
-                    toast("Loading")
+                    //toast("Loading")
                 }
                 ResourceState.SUCCESS -> {
-                    toast("Product is added to Firestore")
+                    //toast("Product is added to Firestore")
                     hideProgress()
                     fragment.refresh()
                     dismiss()
