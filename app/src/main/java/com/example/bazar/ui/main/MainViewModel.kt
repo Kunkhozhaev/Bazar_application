@@ -9,18 +9,20 @@ import com.example.bazar.data.model.Product
 
 class MainViewModel(private val productHelper: ProductHelper) : ViewModel(){
 
-    private var _product: MutableLiveData<Resource<String>> = MutableLiveData()
-    val product: LiveData<Resource<String>> get() = _product
+    //Creating LiveData for all processes to observe them in MainFragment & AddDialogFragment:
+    //Adding, Getting all data, Deleting, Changing checkbox state
+    private var _productAdd: MutableLiveData<Resource<String>> = MutableLiveData()
+    val productAdd: LiveData<Resource<String>> get() = _productAdd
 
     fun addNewProduct(productName: String) {
-        _product.value = Resource.loading()
+        _productAdd.value = Resource.loading()
         productHelper.addNewProduct(
             productName,
             {
-                _product.value = Resource.success("")
+                _productAdd.value = Resource.success("")
             },
             {
-                _product.value = Resource.error(it)
+                _productAdd.value = Resource.error(it)
             }
         )
     }

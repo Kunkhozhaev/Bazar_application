@@ -39,6 +39,9 @@ class MainAdapter : RecyclerView.Adapter<MainAdapter.ViewHolder>() {
     var models: MutableList<Product> = mutableListOf()
         @SuppressLint("NotifyDataSetChanged")
         set(value) {
+            // After applying changes to firestore,
+            // it clears the whole list of products in the device.
+            // Then retrieves new changed data from firestore and shows to user again
             models.clear()
             field = value
             notifyDataSetChanged()

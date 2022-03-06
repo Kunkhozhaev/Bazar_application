@@ -41,7 +41,7 @@ class AddDialogFragment(private val fragment: MainFragment) : BottomSheetDialogF
         binding.apply {
             btnAdd.onClick {
                 val productName = productName.text.toString()
-                viewModel.addNewProduct(productName)
+                viewModel.addNewProduct(productName) //Add a new product
             }
             cancel.onClick {
                 dialog!!.dismiss()
@@ -49,15 +49,14 @@ class AddDialogFragment(private val fragment: MainFragment) : BottomSheetDialogF
         }
     }
 
+    // Observer of a ProductHelper.addNewProduct()
     private fun setUpAddObserver(){
-        viewModel.product.observe(requireActivity()) {
+        viewModel.productAdd.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
                     showProgress()
-                    //toast("Loading")
                 }
                 ResourceState.SUCCESS -> {
-                    //toast("Product is added to Firestore")
                     hideProgress()
                     fragment.refresh()
                     dismiss()

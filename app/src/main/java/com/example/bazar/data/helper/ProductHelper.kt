@@ -6,15 +6,16 @@ import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 
 class ProductHelper(
-    private val db: FirebaseFirestore
+    private val db: FirebaseFirestore //Firebase Firestore reference
 ) {
-
+    //Adds New product to Firestore received from `productName` edittext
     fun addNewProduct(
         productName: String,
         onSuccess: (msg: String?) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
-        val id = UUID.randomUUID().toString()
+        //Creating a new document for an each new product
+        val id = UUID.randomUUID().toString() //Create new random id used as a document name in `Products` collection
 
         db.collection(Constants.PRODUCTS).document(id).set(Product(id, productName))
             .addOnSuccessListener {
@@ -24,13 +25,14 @@ class ProductHelper(
                 onFailure.invoke(it.localizedMessage)
             }
     }
-
+    // Receives all documents list and its content, i.e. productNames
     fun allProducts(
         onSuccess: (products: MutableList<Product>) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
         db.collection(Constants.PRODUCTS).get()
             .addOnSuccessListener {
+                //Casting Firestore documents list to Product Class object
                 val documentsList = it.documents.map {
                     it.toObject(Product::class.java)
                 }
@@ -41,7 +43,7 @@ class ProductHelper(
                 onFailure.invoke(it.localizedMessage)
             }
     }
-
+    //Deletes a document, i.e. productName using its id
     fun deleteProduct(
         id: String,
         onSuccess: (msg: String?) -> Unit,
@@ -55,7 +57,7 @@ class ProductHelper(
                 onFailure.invoke(it.localizedMessage)
             }
     }
-
+    //Updates checkbox state of a current productName
     fun setCheckboxState(
         id: String,
         checked: Boolean,

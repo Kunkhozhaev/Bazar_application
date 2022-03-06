@@ -18,34 +18,32 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMainBinding.bind(view)
-        binding.addingBtn.onClick {
-            showDialog()
-        }
-        binding.rvProducts.adapter = adapter
-
-        adapter.setOnItemClickListener { it ->
-            viewModel.deleteProduct(it.id)
-        }
-
-        adapter.setOnCheckBoxClickListener { product, state ->
-            viewModel.setCheckboxState(product.id, state)
-        }
-
         binding.apply{
+            rvProducts.adapter = adapter
+
+            addingBtn.onClick { showDialog() }
+
             swipeToRefresh.setOnRefreshListener {
                 refresh()
                 swipeToRefresh.isRefreshing = false
             }
         }
+        //When delete icon clicked
+        adapter.setOnItemClickListener { it ->
+            viewModel.deleteProduct(it.id)
+        }
 
-        viewModel.allProducts()
+        //When checkbox state updated
+        adapter.setOnCheckBoxClickListener { product, state ->
+            viewModel.setCheckboxState(product.id, state)
+        }
 
+        viewModel.allProducts() // Show all products from Firestore
         setUpObserver()
-        setCheckboxObserver()
     }
 
     private fun setUpObserver() {
-        //Observer of Getting function
+        //Observer of ProductHelper.allProducts() function
         viewModel.productList.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
@@ -65,8 +63,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
-
-        // Observer of Deleting function
+        // Observer of ProductHelper.deleteProduct() function
         viewModel.productDelete.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
@@ -87,9 +84,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
-    }
-
-    private fun setCheckboxObserver(){
+        //Observer of ProductHelper.setCheckboxState() function
         viewModel.checkboxState.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
