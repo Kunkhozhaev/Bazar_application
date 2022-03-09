@@ -1,7 +1,9 @@
 package com.example.bazar.ui.main
 
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
 import com.example.bazar.R
 import com.example.bazar.core.*
@@ -27,13 +29,17 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 refresh()
                 swipeToRefresh.isRefreshing = false
             }
+
+            popUpImg.setOnClickListener {
+                showMenu(it)
+            }
         }
-        //When delete icon clicked
+        //When delete icon is clicked
         adapter.setOnItemClickListener { it ->
             viewModel.deleteProduct(it.id)
         }
 
-        //When checkbox state updated
+        //When checkbox state is updated
         adapter.setOnCheckBoxClickListener { product, state ->
             viewModel.setCheckboxState(product.id, state)
         }
@@ -67,10 +73,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         viewModel.productDelete.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
-                    showProgress()
+                    //showProgress()
                 }
                 ResourceState.SUCCESS -> {
-                    hideProgress()
+                    //hideProgress()
                     toast("Продукт удален")
                     viewModel.allProducts()
                 }
@@ -88,10 +94,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         viewModel.checkboxState.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
-                    showProgress()
+                    //showProgress()
                 }
                 ResourceState.SUCCESS -> {
-                    hideProgress()
+                    //hideProgress()
                 }
                 ResourceState.ERROR -> {
                     toast(it.message!!)
@@ -111,6 +117,41 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private fun showDialog() {
         AddDialogFragment(this)
+    }
+
+    private fun showMenu(v:View){
+        val popUp = PopupMenu(context, v)
+        popUp.setOnMenuItemClickListener { item ->
+            when(item.itemId){
+                R.id.deleteSelected ->{
+                    toast("All selected are deleted")
+                    true
+                }
+                R.id.deleteAll -> {
+                    toast("All data deleted")
+                    true
+                }
+                else -> false
+            }
+        }
+
+        popUp.inflate(R.menu.popup)
+
+        //try..catch to show icons in popUp menu elements. Don't ask how it works ¯\_(ツ)_/¯
+        try{
+            val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
+            fieldMPopup.isAccessible = true
+            val mPopup = fieldMPopup.get(popUp)
+            mPopup.javaClass
+                .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
+                .invoke(mPopup, true)
+        }catch (e: Exception){
+            Log.e("Main", "Error in showing popUp menu icons", e)
+        }finally {
+            popUp.show() //Showing the menu
+        }
+
+
     }
 
 }

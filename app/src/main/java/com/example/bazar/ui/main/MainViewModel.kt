@@ -75,4 +75,20 @@ class MainViewModel(private val productHelper: ProductHelper) : ViewModel(){
             }
         )
     }
+
+    // TODO("deleteSelected livedata")
+    private var _selectedProducts: MutableLiveData<Resource<MutableList<Product>>> = MutableLiveData()
+    val selectedProducts: LiveData<Resource<MutableList<Product>>> get() = _selectedProducts
+
+    fun deleteSelected(){
+        _selectedProducts.value = Resource.loading()
+        productHelper.deleteSelected(
+            {
+                _selectedProducts.value = Resource.success(it)
+            },
+            {
+                _selectedProducts.value = Resource.error(it)
+            }
+        )
+    }
 }

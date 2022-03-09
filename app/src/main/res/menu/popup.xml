@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/deleteSelected"
+        android:title="Удалить отмеченные"
+        android:icon="@drawable/ic_delete_selected">
+    </item>
+
+    <item
+        android:id="@+id/deleteAll"
+        android:title="Удалить все"
+        android:icon="@drawable/ic_delete_all">
+    </item>
+
+</menu>
