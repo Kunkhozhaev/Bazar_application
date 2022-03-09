@@ -2,6 +2,7 @@ package com.example.bazar.ui.main
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
@@ -23,16 +24,29 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         binding.apply {
             rvProducts.adapter = adapter
 
-            addingBtn.onClick { showDialog() }
+            toolbar.setOnMenuItemClickListener{
+                when (it.itemId) {
+                    R.id.addingBtn ->{
+                        showDialog()
+                        true
+                    }
+                    R.id.deleteSelected -> {
+                        viewModel.deleteSelected()
+                        true
+                    }
+                    R.id.deleteAll -> {
+                        viewModel.deleteAllProducts()
+                        true
+                    }
+                    else -> false
+                }
+            }
 
             swipeToRefresh.setOnRefreshListener {
                 refresh()
                 swipeToRefresh.isRefreshing = false
             }
 
-            popUpImg.setOnClickListener {
-                showMenu(it)
-            }
         }
         //When delete icon is clicked
         adapter.setOnItemClickListener { it ->
@@ -73,10 +87,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         viewModel.productDelete.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
-                    //showProgress()
+                    showProgress()
                 }
                 ResourceState.SUCCESS -> {
-                    //hideProgress()
+                    hideProgress()
                     toast("Продукт удален")
                     viewModel.allProducts()
                 }
@@ -159,25 +173,28 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         AddDialogFragment(this)
     }
 
-    private fun showMenu(v: View) {
-        val popUp = PopupMenu(context, v)
+    /*private fun showMenu(v: View) {
+        val popUp = PopupMenu(requireContext(), v)
+        popUp.inflate(R.menu.toolbar)
+        popUp.gravity= Gravity.CENTER
+
         popUp.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.deleteSelected -> {
                     viewModel.deleteSelected()
-                    toast("All selected are deleted")
+                    toast("Все отмеченные удалены")
                     true
                 }
                 R.id.deleteAll -> {
                     viewModel.deleteAllProducts()
-                    toast("All data deleted")
+                    toast("Все данные удалены")
                     true
                 }
                 else -> false
             }
         }
 
-        popUp.inflate(R.menu.popup)
+        popUp.inflate(R.menu.toolbar)
 
         //try..catch to show icons in popUp menu elements. Don't ask how it works ¯\_(ツ)_/¯
         try {
@@ -192,6 +209,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         } finally {
             popUp.show() //Showing the menu
         }
-    }
+    }*/
 
 }

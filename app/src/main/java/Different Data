@@ -28,3 +28,30 @@ fun setCheckboxState(
                 onFailure.invoke(it.localizedMessage)
             }
     }
+
+
+    <LinearLayout
+            android:id="@+id/topActions"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_toEndOf="@id/topText"
+            android:layout_marginTop="25dp"
+            >
+
+            <ImageButton
+                android:id="@+id/addingBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:src="@drawable/ic_add">
+            </ImageButton>
+
+            <ImageButton
+                android:id="@+id/popUpImg"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/white"
+                android:src="@drawable/ic_drop_menu">
+            </ImageButton>
+        </LinearLayout>

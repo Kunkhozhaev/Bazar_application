@@ -54,10 +54,10 @@ class AddDialogFragment(private val fragment: MainFragment) : BottomSheetDialogF
         viewModel.productAdd.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
-                    //showProgress()
+                    showProgress()
                 }
                 ResourceState.SUCCESS -> {
-                    //hideProgress()
+                    hideProgress()
                     fragment.refresh()
                     dismiss()
                     toast("Продукт добавлен")

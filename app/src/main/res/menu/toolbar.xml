@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/addingBtn"
+        android:icon="@drawable/ic_add"
+        app:showAsAction="always"
+        android:title="">
+    </item>
+
     <item
         android:id="@+id/deleteSelected"
         android:icon="@drawable/ic_delete_selected"
         android:title="Удалить отмеченные">
     </item>
+
     <item
         android:id="@+id/deleteAll"
         android:icon="@drawable/ic_delete_all"
         android:title="Удалить все">
     </item>
+
+
 </menu>
