@@ -1,6 +1,7 @@
 package com.example.bazar.data.helper
 
 import com.example.bazar.core.Constants
+import com.example.bazar.core.Constants.BAZARTEST
 import com.example.bazar.data.model.Product
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
@@ -15,9 +16,10 @@ class ProductHelper(
         onFailure: (msg: String?) -> Unit
     ) {
         //Creating a new document for an each new product
-        val id = UUID.randomUUID().toString() //Create new random id used as a document name in `Products` collection
+        val id = UUID.randomUUID()
+            .toString() //Create new random id used as a document name in `Products` collection
 
-        db.collection(Constants.BAZARTEST).document(id).set(Product(id, productName))
+        db.collection(BAZARTEST).document(id).set(Product(id, productName))
             .addOnSuccessListener {
                 onSuccess.invoke("")
             }
@@ -25,12 +27,13 @@ class ProductHelper(
                 onFailure.invoke(it.localizedMessage)
             }
     }
+
     // Receives all documents list and its content, i.e. productNames
     fun allProducts(
         onSuccess: (products: MutableList<Product>) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
-        db.collection(Constants.BAZARTEST).get()
+        db.collection(BAZARTEST).get()
             .addOnSuccessListener {
                 //Casting Firestore documents list to Product Class object
                 val documentsList = it.documents.map {
@@ -43,6 +46,7 @@ class ProductHelper(
                 onFailure.invoke(it.localizedMessage)
             }
     }
+
     //Deletes a document, i.e. productName using its id
     fun deleteProduct(
         id: String,
@@ -57,6 +61,7 @@ class ProductHelper(
                 onFailure.invoke(it.localizedMessage)
             }
     }
+
     //Updates checkbox state of a current productName
     fun setCheckboxState(
         id: String,
@@ -64,7 +69,7 @@ class ProductHelper(
         onSuccess: (bool: Boolean) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
-        db.collection(Constants.BAZARTEST).document(id).update("checked", checked)
+        db.collection(BAZARTEST).document(id).update("checked", checked)
             .addOnSuccessListener {
                 onSuccess.invoke(checked)
             }
@@ -75,38 +80,39 @@ class ProductHelper(
 
     //Delete selected
     fun deleteSelected(
-        onSuccess: (products: MutableList<Product>) -> Unit,
+        onSuccess: (msg: String?) -> Unit,
         onFailure: (msg: String?) -> Unit
-    ){
-        var documentsList: List<Product> = emptyList()
-
-        // Get actual data for now
-        db.collection(Constants.BAZARTEST).get()
+    ) {
+        db.collection(BAZARTEST).whereEqualTo("checked", true).get()
             .addOnSuccessListener {
-                //Casting Firestore documents list to Product Class object
-                documentsList = it.documents.map {
-                    it.toObject(Product::class.java)
-                } as List<Product>
-
-                // TODO("On Succes???")
-
+                it.documents.map { doc ->
+                    val product = doc.toObject(Product::class.java)!!
+                    db.collection(BAZARTEST).document(product.id).delete()
+                    onSuccess.invoke("")
+                }
             }
             .addOnFailureListener {
-                // TODO("On Failure???")
+                onFailure.invoke(it.localizedMessage)
             }
+    }
 
-        // Delete products where product.checked == true
-        documentsList.forEach{ product ->
-            if (product.checked){ // TODO("Maybe optimize cod here???")
-                db.collection(Constants.BAZARTEST).document(product.id).delete()
-                    .addOnSuccessListener {
-                        onSuccess.invoke("")
-                    }
-                    .addOnFailureListener {
-                        onFailure.invoke(it.localizedMessage)
-                    }
+    // All items deleted
+    fun deleteAllProducts(
+        onSuccess: (msg: String?) -> Unit,
+        onFailure: (msg: String?) -> Unit
+    ) {
+        db.collection(BAZARTEST).get()
+            .addOnSuccessListener {
+                it.documents.map { doc ->
+                    val product = doc.toObject(Product::class.java)!!
+                    db.collection(BAZARTEST).document(product.id).delete()
+                        .addOnSuccessListener {
+                            onSuccess.invoke("")
+                        }
+                }
             }
-        }
-
+            .addOnFailureListener {
+                onFailure.invoke(it.localizedMessage)
+            }
     }
 }

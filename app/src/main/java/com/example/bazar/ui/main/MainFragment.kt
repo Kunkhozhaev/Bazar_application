@@ -20,7 +20,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentMainBinding.bind(view)
-        binding.apply{
+        binding.apply {
             rvProducts.adapter = adapter
 
             addingBtn.onClick { showDialog() }
@@ -109,6 +109,46 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
+
+        viewModel.selectedProducts.observe(requireActivity()) {
+            when (it.status) {
+                ResourceState.LOADING -> {
+                    showProgress()
+                }
+                ResourceState.SUCCESS -> {
+                    viewModel.allProducts()
+                    hideProgress()
+                }
+                ResourceState.ERROR -> {
+                    toast(it.message!!)
+                    hideProgress()
+                }
+                ResourceState.NETWORK_ERROR -> {
+                    hideProgress()
+                    toast(NO_INTERNET)
+                }
+            }
+        }
+
+        viewModel.deleteAllProducts.observe(requireActivity()) {
+            when (it.status) {
+                ResourceState.LOADING -> {
+                    showProgress()
+                }
+                ResourceState.SUCCESS -> {
+                    viewModel.allProducts()
+                    hideProgress()
+                }
+                ResourceState.ERROR -> {
+                    toast(it.message!!)
+                    hideProgress()
+                }
+                ResourceState.NETWORK_ERROR -> {
+                    hideProgress()
+                    toast(NO_INTERNET)
+                }
+            }
+        }
     }
 
     fun refresh() {
@@ -119,15 +159,17 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         AddDialogFragment(this)
     }
 
-    private fun showMenu(v:View){
+    private fun showMenu(v: View) {
         val popUp = PopupMenu(context, v)
         popUp.setOnMenuItemClickListener { item ->
-            when(item.itemId){
-                R.id.deleteSelected ->{
+            when (item.itemId) {
+                R.id.deleteSelected -> {
+                    viewModel.deleteSelected()
                     toast("All selected are deleted")
                     true
                 }
                 R.id.deleteAll -> {
+                    viewModel.deleteAllProducts()
                     toast("All data deleted")
                     true
                 }
@@ -138,20 +180,18 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         popUp.inflate(R.menu.popup)
 
         //try..catch to show icons in popUp menu elements. Don't ask how it works ¯\_(ツ)_/¯
-        try{
+        try {
             val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
             fieldMPopup.isAccessible = true
             val mPopup = fieldMPopup.get(popUp)
             mPopup.javaClass
                 .getDeclaredMethod("setForceShowIcon", Boolean::class.java)
                 .invoke(mPopup, true)
-        }catch (e: Exception){
+        } catch (e: Exception) {
             Log.e("Main", "Error in showing popUp menu icons", e)
-        }finally {
+        } finally {
             popUp.show() //Showing the menu
         }
-
-
     }
 
 }

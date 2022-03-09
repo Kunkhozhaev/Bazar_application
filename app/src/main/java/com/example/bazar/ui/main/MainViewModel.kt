@@ -7,7 +7,7 @@ import com.example.bazar.data.helper.ProductHelper
 import com.example.bazar.core.Resource
 import com.example.bazar.data.model.Product
 
-class MainViewModel(private val productHelper: ProductHelper) : ViewModel(){
+class MainViewModel(private val productHelper: ProductHelper) : ViewModel() {
 
     //Creating LiveData for all processes to observe them in MainFragment & AddDialogFragment:
     //Adding, Getting all data, Deleting, Changing checkbox state
@@ -62,7 +62,7 @@ class MainViewModel(private val productHelper: ProductHelper) : ViewModel(){
     private var _checkboxState: MutableLiveData<Resource<Boolean>> = MutableLiveData()
     val checkboxState: LiveData<Resource<Boolean>> get() = _checkboxState
 
-    fun setCheckboxState(id : String, checked : Boolean){
+    fun setCheckboxState(id: String, checked: Boolean) {
         _checkboxState.value = Resource.loading()
         productHelper.setCheckboxState(
             id,
@@ -77,10 +77,10 @@ class MainViewModel(private val productHelper: ProductHelper) : ViewModel(){
     }
 
     // TODO("deleteSelected livedata")
-    private var _selectedProducts: MutableLiveData<Resource<MutableList<Product>>> = MutableLiveData()
-    val selectedProducts: LiveData<Resource<MutableList<Product>>> get() = _selectedProducts
+    private var _selectedProducts: MutableLiveData<Resource<String?>> = MutableLiveData()
+    val selectedProducts: LiveData<Resource<String?>> get() = _selectedProducts
 
-    fun deleteSelected(){
+    fun deleteSelected() {
         _selectedProducts.value = Resource.loading()
         productHelper.deleteSelected(
             {
@@ -91,4 +91,20 @@ class MainViewModel(private val productHelper: ProductHelper) : ViewModel(){
             }
         )
     }
+
+    private var _deleteAllProducts: MutableLiveData<Resource<String?>> = MutableLiveData()
+    val deleteAllProducts: LiveData<Resource<String?>> get() = _deleteAllProducts
+
+    fun deleteAllProducts() {
+        _selectedProducts.value = Resource.loading()
+        productHelper.deleteAllProducts(
+            {
+                _selectedProducts.value = Resource.success(it)
+            },
+            {
+                _selectedProducts.value = Resource.error(it)
+            }
+        )
+    }
+
 }
