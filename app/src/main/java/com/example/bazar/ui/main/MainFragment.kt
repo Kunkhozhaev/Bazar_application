@@ -32,10 +32,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                     }
                     R.id.deleteSelected -> {
                         viewModel.deleteSelected()
+                        toast("Все отмеченные удалены")
                         true
                     }
                     R.id.deleteAll -> {
                         viewModel.deleteAllProducts()
+                        toast("Все данные удалены")
                         true
                     }
                     else -> false
@@ -123,11 +125,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
-
+        //Observer of ProductHelper.deleteSelected() function
         viewModel.selectedProducts.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
                     showProgress()
+                    toast("Loading")
                 }
                 ResourceState.SUCCESS -> {
                     viewModel.allProducts()
@@ -143,11 +146,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
-
+        //Observer of ProductHelper.deleteAllProducts() function
         viewModel.deleteAllProducts.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
                     showProgress()
+                    toast("Loading")
                 }
                 ResourceState.SUCCESS -> {
                     viewModel.allProducts()

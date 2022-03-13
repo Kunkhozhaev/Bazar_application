@@ -12,6 +12,7 @@ class ProductHelper(
     //Adds New product to Firestore received from `productName` edittext
     fun addNewProduct(
         productName: String,
+        time: Long,
         onSuccess: (msg: String?) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
@@ -19,7 +20,7 @@ class ProductHelper(
         val id = UUID.randomUUID()
             .toString() //Create new random id used as a document name in `Products` collection
 
-        db.collection(BAZARTEST).document(id).set(Product(id, productName))
+        db.collection(BAZARTEST).document(id).set(Product(id, productName, time))
             .addOnSuccessListener {
                 onSuccess.invoke("")
             }
@@ -39,7 +40,9 @@ class ProductHelper(
                 val documentsList = it.documents.map {
                     it.toObject(Product::class.java)
                 }
-                onSuccess.invoke(documentsList as MutableList<Product>)
+                var sortedList = documentsList as MutableList<Product>
+                sortedList.sortBy { product ->  product.time }
+                onSuccess.invoke(sortedList)
 
             }
             .addOnFailureListener {
