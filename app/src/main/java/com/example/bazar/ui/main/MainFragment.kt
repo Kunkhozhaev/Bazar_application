@@ -22,16 +22,22 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         binding = FragmentMainBinding.bind(view)
         binding.apply {
             rvProducts.adapter = adapter
-
-            addingBtn.onClick { showDialog() }
-
             swipeToRefresh.setOnRefreshListener {
                 refresh()
                 swipeToRefresh.isRefreshing = false
             }
-
-            popUpImg.setOnClickListener {
-                showMenu(it)
+            toolbar.setOnMenuItemClickListener {
+                when(it.itemId){
+                    R.id.add_product -> {
+                        showDialog()
+                        true
+                    }
+                    R.id.delete -> {
+                        showMenu(toolbar.findViewById(R.id.delete))
+                        true
+                    }
+                    else -> false
+                }
             }
         }
         //When delete icon is clicked

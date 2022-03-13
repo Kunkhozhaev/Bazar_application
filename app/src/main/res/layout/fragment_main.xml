@@ -1,73 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/rltLayout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    tools:context=".ui.MainActivity">
+    >
 
-    <LinearLayout
-        android:id="@+id/topText"
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/topAppBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:layout_centerHorizontal="true"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/appName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/alegreya_sc"
-            android:text="BazarApp"
-            android:textColor="@color/blueAddItem"
-            android:textSize="45sp">
-        </TextView>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="serif"
-            android:text="© Nurdaulet"
-            android:textColor="@color/notificationBarColor">
-        </TextView>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/topActions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_toEndOf="@id/topText"
-        android:layout_marginTop="25dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@color/app_bar_bg"
         >
 
-        <ImageButton
-            android:id="@+id/addingBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/ic_add">
-        </ImageButton>
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/top_app_bar"
+            app:title="@string/toolbar_title"
+            app:titleMarginStart="@dimen/margin_large"
+            app:titleTextColor="@color/white" />
 
-        <ImageButton
-            android:id="@+id/popUpImg"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
-            android:src="@drawable/ic_drop_menu">
-        </ImageButton>
-    </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipeToRefresh"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_marginTop="5dp"
-        android:layout_alignTop="@id/divider">
+        app:layout_constraintTop_toBottomOf="@id/topAppBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rvProducts"
@@ -79,12 +48,4 @@
             />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignBottom="@+id/topActions"
-        android:background="@android:color/darker_gray">
-    </View>
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

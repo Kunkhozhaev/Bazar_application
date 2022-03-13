@@ -42,6 +42,7 @@ class AddDialogFragment(private val fragment: MainFragment) : BottomSheetDialogF
             btnAdd.onClick {
                 val productName = productName.text.toString()
                 viewModel.addNewProduct(productName) //Add a new product
+
             }
             cancel.onClick {
                 dialog!!.dismiss()

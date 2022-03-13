@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/add_product"
+        android:title="Add Product"
+        android:icon="@drawable/ic_baseline_add_24"
+        app:showAsAction="ifRoom"
+        >
+    </item>
+
+    <item
+        android:id="@+id/delete"
+        android:title="Delete Menu"
+        android:icon="@drawable/ic_baseline_more_vert_24"
+        app:showAsAction="ifRoom"
+        >
+    </item>
+
+</menu>
