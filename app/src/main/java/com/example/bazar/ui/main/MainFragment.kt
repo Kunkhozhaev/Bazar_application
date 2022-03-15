@@ -79,10 +79,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         viewModel.productDelete.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
-                    //showProgress()
+                    showProgress()
                 }
                 ResourceState.SUCCESS -> {
-                    //hideProgress()
+                    hideProgress()
                     toast("Продукт удален")
                     viewModel.allProducts()
                 }
@@ -115,7 +115,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
-
+        // Observer of ProductHelper.deleteSelected()
         viewModel.selectedProducts.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
@@ -135,7 +135,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
-
+        //Observer of ProductHelper.deleteAll()
         viewModel.deleteAllProducts.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
@@ -171,12 +171,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             when (item.itemId) {
                 R.id.deleteSelected -> {
                     viewModel.deleteSelected()
-                    toast("All selected are deleted")
+                    //toast("Все отмеченные удалены")
                     true
                 }
                 R.id.deleteAll -> {
                     viewModel.deleteAllProducts()
-                    toast("All data deleted")
+                    //toast("Весь список удален")
                     true
                 }
                 else -> false

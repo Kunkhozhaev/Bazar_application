@@ -1,7 +1,7 @@
 package com.example.bazar.data.helper
 
 import com.example.bazar.core.Constants
-import com.example.bazar.core.Constants.BAZARTEST
+import com.example.bazar.core.Constants.PRODUCTS
 import com.example.bazar.data.model.Product
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
@@ -20,7 +20,7 @@ class ProductHelper(
         val id = UUID.randomUUID()
             .toString() //Create new random id used as a document name in `Products` collection
 
-        db.collection(BAZARTEST).document(id).set(Product(id, productName, time))
+        db.collection(PRODUCTS).document(id).set(Product(id, productName, time))
             .addOnSuccessListener {
                 onSuccess.invoke("")
             }
@@ -34,7 +34,7 @@ class ProductHelper(
         onSuccess: (products: MutableList<Product>) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
-        db.collection(BAZARTEST).get()
+        db.collection(PRODUCTS).get()
             .addOnSuccessListener {
                 //Casting Firestore documents list to Product Class object
                 val documentsList = it.documents.map {
@@ -56,7 +56,7 @@ class ProductHelper(
         onSuccess: (msg: String?) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
-        db.collection(Constants.BAZARTEST).document(id).delete()
+        db.collection(Constants.PRODUCTS).document(id).delete()
             .addOnSuccessListener {
                 onSuccess.invoke("")
             }
@@ -72,7 +72,7 @@ class ProductHelper(
         onSuccess: (bool: Boolean) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
-        db.collection(BAZARTEST).document(id).update("checked", checked)
+        db.collection(PRODUCTS).document(id).update("checked", checked)
             .addOnSuccessListener {
                 onSuccess.invoke(checked)
             }
@@ -86,11 +86,15 @@ class ProductHelper(
         onSuccess: (msg: String?) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
-        db.collection(BAZARTEST).whereEqualTo("checked", true).get()
+        db.collection(PRODUCTS).whereEqualTo("checked", true).get()
             .addOnSuccessListener {
-                it.documents.map { doc ->
-                    val product = doc.toObject(Product::class.java)!!
-                    db.collection(BAZARTEST).document(product.id).delete()
+                if (it.documents.isNotEmpty()) {
+                    it.documents.map { doc ->
+                        val product = doc.toObject(Product::class.java)!!
+                        db.collection(PRODUCTS).document(product.id).delete()
+                        onSuccess.invoke("")
+                    }
+                } else{
                     onSuccess.invoke("")
                 }
             }
@@ -104,14 +108,18 @@ class ProductHelper(
         onSuccess: (msg: String?) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
-        db.collection(BAZARTEST).get()
+        db.collection(PRODUCTS).get()
             .addOnSuccessListener {
-                it.documents.map { doc ->
-                    val product = doc.toObject(Product::class.java)!!
-                    db.collection(BAZARTEST).document(product.id).delete()
-                        .addOnSuccessListener {
-                            onSuccess.invoke("")
-                        }
+                if (it.documents.isNotEmpty()) {
+                    it.documents.map { doc ->
+                        val product = doc.toObject(Product::class.java)!!
+                        db.collection(PRODUCTS).document(product.id).delete()
+                            .addOnSuccessListener {
+                                onSuccess.invoke("")
+                            }
+                    }
+                } else{
+                    onSuccess.invoke("")
                 }
             }
             .addOnFailureListener {

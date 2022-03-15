@@ -9,6 +9,7 @@ import com.example.bazar.core.*
 import com.example.bazar.databinding.ItemAddBinding
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import org.koin.android.viewmodel.ext.android.viewModel
+import java.util.*
 
 class AddDialogFragment(private val fragment: MainFragment) : BottomSheetDialogFragment() {
 
@@ -41,7 +42,9 @@ class AddDialogFragment(private val fragment: MainFragment) : BottomSheetDialogF
         binding.apply {
             btnAdd.onClick {
                 val productName = productName.text.toString()
-                viewModel.addNewProduct(productName) //Add a new product
+
+                val time = Calendar.getInstance().timeInMillis
+                viewModel.addNewProduct(productName, time) //Add a new product
 
             }
             cancel.onClick {
@@ -55,10 +58,10 @@ class AddDialogFragment(private val fragment: MainFragment) : BottomSheetDialogF
         viewModel.productAdd.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
-                    //showProgress()
+                    showProgress()
                 }
                 ResourceState.SUCCESS -> {
-                    //hideProgress()
+                    hideProgress()
                     fragment.refresh()
                     dismiss()
                     toast("Продукт добавлен")
