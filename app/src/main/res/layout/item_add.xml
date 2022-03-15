@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:minWidth="280dp"
-    android:orientation="vertical"
-    android:gravity="center">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:minHeight="280dp"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,28 +15,34 @@
             android:text="Введите продукт"
             android:textStyle="bold"
             android:textSize="19sp"
-            android:textColor="@color/white"
-            android:background="@color/blueAddItem"
             android:padding="7dp"
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
-        <EditText
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/textField"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/productName"
-            android:hint="Продукт..."
-            android:inputType="textPersonName"
-            android:textColor="@color/notificationBarColor"
-            android:background="@drawable/shape_background"
-            android:padding="15dp"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="5dp"/>
+            android:hint="@string/product"
+            android:backgroundTint="@color/white"
+            app:boxBackgroundMode="outline"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:theme="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/productName"
+                android:backgroundTint="@color/white"
+                android:inputType="text"
+                android:textColor="@color/app_bar_bg"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -45,22 +50,24 @@
             android:orientation="horizontal"
             android:gravity="right">
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/cancel"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:backgroundTint="@color/blueAddItem"
+                android:backgroundTint="@color/app_bar_bg"
                 android:textColor="@color/white"
+                android:layout_margin="8dp"
+                android:foreground="?attr/selectableItemBackground"
                 android:text="Отменить" />
 
-            <Button
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/btnAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="50dp"
-                android:layout_margin="5dp"
-                android:backgroundTint="@color/blueAddItem"
+                android:backgroundTint="@color/app_bar_bg"
                 android:textColor="@color/white"
+                android:layout_margin="8dp"
+                android:foreground="?attr/selectableItemBackground"
                 android:text="Добавить" />
 
         </LinearLayout>

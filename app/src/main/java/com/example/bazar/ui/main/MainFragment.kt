@@ -2,7 +2,6 @@ package com.example.bazar.ui.main
 
 import android.os.Bundle
 import android.util.Log
-import android.view.Gravity
 import android.view.View
 import android.widget.PopupMenu
 import androidx.fragment.app.Fragment
@@ -23,32 +22,23 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         binding = FragmentMainBinding.bind(view)
         binding.apply {
             rvProducts.adapter = adapter
-
-            toolbar.setOnMenuItemClickListener{
-                when (it.itemId) {
-                    R.id.addingBtn ->{
+            swipeToRefresh.setOnRefreshListener {
+                refresh()
+                swipeToRefresh.isRefreshing = false
+            }
+            toolbar.setOnMenuItemClickListener {
+                when(it.itemId){
+                    R.id.add_product -> {
                         showDialog()
                         true
                     }
-                    R.id.deleteSelected -> {
-                        viewModel.deleteSelected()
-                        toast("Все отмеченные удалены")
-                        true
-                    }
-                    R.id.deleteAll -> {
-                        viewModel.deleteAllProducts()
-                        toast("Все данные удалены")
+                    R.id.delete -> {
+                        showMenu(toolbar.findViewById(R.id.delete))
                         true
                     }
                     else -> false
                 }
             }
-
-            swipeToRefresh.setOnRefreshListener {
-                refresh()
-                swipeToRefresh.isRefreshing = false
-            }
-
         }
         //When delete icon is clicked
         adapter.setOnItemClickListener { it ->
@@ -89,10 +79,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         viewModel.productDelete.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
-                    showProgress()
+                    //showProgress()
                 }
                 ResourceState.SUCCESS -> {
-                    hideProgress()
+                    //hideProgress()
                     toast("Продукт удален")
                     viewModel.allProducts()
                 }
@@ -125,12 +115,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
-        //Observer of ProductHelper.deleteSelected() function
+
         viewModel.selectedProducts.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
                     showProgress()
-                    toast("Loading")
                 }
                 ResourceState.SUCCESS -> {
                     viewModel.allProducts()
@@ -146,12 +135,11 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
-        //Observer of ProductHelper.deleteAllProducts() function
+
         viewModel.deleteAllProducts.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
                     showProgress()
-                    toast("Loading")
                 }
                 ResourceState.SUCCESS -> {
                     viewModel.allProducts()
@@ -177,28 +165,25 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         AddDialogFragment(this)
     }
 
-    /*private fun showMenu(v: View) {
-        val popUp = PopupMenu(requireContext(), v)
-        popUp.inflate(R.menu.toolbar)
-        popUp.gravity= Gravity.CENTER
-
+    private fun showMenu(v: View) {
+        val popUp = PopupMenu(context, v)
         popUp.setOnMenuItemClickListener { item ->
             when (item.itemId) {
                 R.id.deleteSelected -> {
                     viewModel.deleteSelected()
-                    toast("Все отмеченные удалены")
+                    toast("All selected are deleted")
                     true
                 }
                 R.id.deleteAll -> {
                     viewModel.deleteAllProducts()
-                    toast("Все данные удалены")
+                    toast("All data deleted")
                     true
                 }
                 else -> false
             }
         }
 
-        popUp.inflate(R.menu.toolbar)
+        popUp.inflate(R.menu.popup)
 
         //try..catch to show icons in popUp menu elements. Don't ask how it works ¯\_(ツ)_/¯
         try {
@@ -213,6 +198,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         } finally {
             popUp.show() //Showing the menu
         }
-    }*/
+    }
 
 }
