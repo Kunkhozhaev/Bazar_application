@@ -1,26 +1,24 @@
 package com.example.bazar.data.helper
 
 import com.example.bazar.core.Constants
-import com.example.bazar.core.Constants.PRODUCTS
+import com.example.bazar.core.Constants.BAZARTEST
 import com.example.bazar.data.model.Product
 import com.google.firebase.firestore.FirebaseFirestore
 import java.util.*
 
 class ProductHelper(
-    private val db: FirebaseFirestore //Firebase Firestore reference
+    private val db: FirebaseFirestore
 ) {
-    //Adds New product to Firestore received from `productName` edittext
     fun addNewProduct(
         productName: String,
         time: Long,
         onSuccess: (msg: String?) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
-        //Creating a new document for an each new product
         val id = UUID.randomUUID()
-            .toString() //Create new random id used as a document name in `Products` collection
+            .toString()
 
-        db.collection(PRODUCTS).document(id).set(Product(id, productName, time))
+        db.collection(BAZARTEST).document(id).set(Product(id, productName, time))
             .addOnSuccessListener {
                 onSuccess.invoke("")
             }
@@ -29,14 +27,12 @@ class ProductHelper(
             }
     }
 
-    // Receives all documents list and its content, i.e. productNames
     fun allProducts(
         onSuccess: (products: MutableList<Product>) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
-        db.collection(PRODUCTS).get()
+        db.collection(BAZARTEST).get()
             .addOnSuccessListener {
-                //Casting Firestore documents list to Product Class object
                 val documentsList = it.documents.map {
                     it.toObject(Product::class.java)
                 }
@@ -50,13 +46,12 @@ class ProductHelper(
             }
     }
 
-    //Deletes a document, i.e. productName using its id
     fun deleteProduct(
         id: String,
         onSuccess: (msg: String?) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
-        db.collection(Constants.PRODUCTS).document(id).delete()
+        db.collection(Constants.BAZARTEST).document(id).delete()
             .addOnSuccessListener {
                 onSuccess.invoke("")
             }
@@ -65,14 +60,13 @@ class ProductHelper(
             }
     }
 
-    //Updates checkbox state of a current productName
     fun setCheckboxState(
         id: String,
         checked: Boolean,
         onSuccess: (bool: Boolean) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
-        db.collection(PRODUCTS).document(id).update("checked", checked)
+        db.collection(BAZARTEST).document(id).update("checked", checked)
             .addOnSuccessListener {
                 onSuccess.invoke(checked)
             }
@@ -81,17 +75,16 @@ class ProductHelper(
             }
     }
 
-    //Delete selected
     fun deleteSelected(
         onSuccess: (msg: String?) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
-        db.collection(PRODUCTS).whereEqualTo("checked", true).get()
+        db.collection(BAZARTEST).whereEqualTo("checked", true).get()
             .addOnSuccessListener {
                 if (it.documents.isNotEmpty()) {
                     it.documents.map { doc ->
                         val product = doc.toObject(Product::class.java)!!
-                        db.collection(PRODUCTS).document(product.id).delete()
+                        db.collection(BAZARTEST).document(product.id).delete()
                         onSuccess.invoke("")
                     }
                 } else{
@@ -103,17 +96,16 @@ class ProductHelper(
             }
     }
 
-    // All items deleted
     fun deleteAllProducts(
         onSuccess: (msg: String?) -> Unit,
         onFailure: (msg: String?) -> Unit
     ) {
-        db.collection(PRODUCTS).get()
+        db.collection(BAZARTEST).get()
             .addOnSuccessListener {
                 if (it.documents.isNotEmpty()) {
                     it.documents.map { doc ->
                         val product = doc.toObject(Product::class.java)!!
-                        db.collection(PRODUCTS).document(product.id).delete()
+                        db.collection(BAZARTEST).document(product.id).delete()
                             .addOnSuccessListener {
                                 onSuccess.invoke("")
                             }

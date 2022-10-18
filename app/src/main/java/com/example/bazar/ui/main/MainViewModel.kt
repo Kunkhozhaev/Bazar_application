@@ -9,8 +9,6 @@ import com.example.bazar.data.model.Product
 
 class MainViewModel(private val productHelper: ProductHelper) : ViewModel() {
 
-    //Creating LiveData for all processes to observe them in MainFragment & AddDialogFragment:
-    //Adding, Getting all data, Deleting, Changing checkbox state, Deleting Selected and Deleting all data
     private var _productAdd: MutableLiveData<Resource<String>> = MutableLiveData()
     val productAdd: LiveData<Resource<String>> get() = _productAdd
 

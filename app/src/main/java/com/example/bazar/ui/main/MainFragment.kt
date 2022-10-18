@@ -40,22 +40,19 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
-        //When delete icon is clicked
         adapter.setOnItemClickListener { it ->
             viewModel.deleteProduct(it.id)
         }
 
-        //When checkbox state is updated
         adapter.setOnCheckBoxClickListener { product, state ->
             viewModel.setCheckboxState(product.id, state)
         }
 
-        viewModel.allProducts() // Show all products from Firestore
+        viewModel.allProducts()
         setUpObserver()
     }
 
     private fun setUpObserver() {
-        //Observer of ProductHelper.allProducts() function
         viewModel.productList.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
@@ -75,7 +72,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
-        // Observer of ProductHelper.deleteProduct() function
         viewModel.productDelete.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
@@ -96,7 +92,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
-        //Observer of ProductHelper.setCheckboxState() function
         viewModel.checkboxState.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
@@ -115,7 +110,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
-        // Observer of ProductHelper.deleteSelected()
         viewModel.selectedProducts.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
@@ -135,7 +129,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             }
         }
-        //Observer of ProductHelper.deleteAll()
         viewModel.deleteAllProducts.observe(requireActivity()) {
             when (it.status) {
                 ResourceState.LOADING -> {
@@ -185,7 +178,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
         popUp.inflate(R.menu.popup)
 
-        //try..catch to show icons in popUp menu elements. Don't ask how it works ¯\_(ツ)_/¯
         try {
             val fieldMPopup = PopupMenu::class.java.getDeclaredField("mPopup")
             fieldMPopup.isAccessible = true

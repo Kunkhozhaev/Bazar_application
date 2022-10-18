@@ -53,7 +53,6 @@ class AddDialogFragment(private val fragment: MainFragment) : BottomSheetDialogF
         }
     }
 
-    // Observer of a ProductHelper.addNewProduct()
     private fun setUpAddObserver(){
         viewModel.productAdd.observe(requireActivity()) {
             when (it.status) {
